@@ -42,40 +42,51 @@ const comparisonCards = [
   },
 ];
 
+const pricingFeatures = [
+  "Monthly Travel Credits",
+  "Monthly Club Fee",
+  "Bonus Credit (Quarterly)",
+  "Insider Hotel (Room upgrades)",
+  "Credit Validity",
+  "Credit Top-Up",
+];
+
 const pricingPlans = [
   {
     tier: "Lite",
     price: "RM225",
-    benefits: [
-      "200 monthly credits",
-      "Access to off-season deals",
-      "Access to last-minute flash sales",
-      "Secure payment gateway",
-    ],
+    features: {
+      "Monthly Travel Credits": "200",
+      "Monthly Club Fee": "RM25",
+      "Bonus Credit (Quarterly)": "-",
+      "Insider Hotel (Room upgrades)": "-",
+      "Credit Validity": "36 months",
+      "Credit Top-Up": "-",
+    },
   },
   {
     tier: "Standard",
     price: "RM389",
-    benefits: [
-      "350 monthly credits",
-      "Access to off-season deals",
-      "Access to last-minute flash sales",
-      "Price-match assurance",
-      "350 annual bonus credit",
-      "Secure payment gateway",
-    ],
+    features: {
+      "Monthly Travel Credits": "350",
+      "Monthly Club Fee": "RM39",
+      "Bonus Credit (Quarterly)": "88",
+      "Insider Hotel (Room upgrades)": "-",
+      "Credit Validity": "36 months",
+      "Credit Top-Up": "-",
+    },
   },
   {
     tier: "Premium",
     price: "RM665",
-    benefits: [
-      "600 monthly credits",
-      "Access to off-season deals",
-      "Access to last-minute flash sales",
-      "Price-match assurance",
-      "750 annual bonus credit",
-      "Room upgrade (subject to availability)",
-    ],
+    features: {
+      "Monthly Travel Credits": "600",
+      "Monthly Club Fee": "RM69",
+      "Bonus Credit (Quarterly)": "125",
+      "Insider Hotel (Room upgrades)": "Exclusive",
+      "Credit Validity": "36 months",
+      "Credit Top-Up": "Exclusive",
+    },
   },
 ];
 
@@ -119,7 +130,7 @@ const Hero = () => (
   <section className="hero">
     <div className="hero-overlay">
       <h1>Innscape</h1>
-      <p>Travel smarter, live freer</p>
+      <p>travel smarter, live freer</p>
       <button className="primary-btn">Join the Waitlist</button>
     </div>
   </section>
@@ -129,8 +140,8 @@ const FeatureHighlights = () => (
   <section className="features">
     {featureHighlights.map((feature) => (
       <article key={feature.title} className="feature-card">
-        <div className="../images/beach.png" aria-hidden="true"></div>
-        <h3>{feature.title}</h3>
+        <div className="placeholder-img" aria-hidden="true"></div>
+        <h2>{feature.title}</h2>
         <p>{feature.description}</p>
       </article>
     ))}
@@ -139,12 +150,12 @@ const FeatureHighlights = () => (
 
 const Comparison = () => (
   <section className="comparison">
-    <h2>Save Monthly, Escape Often</h2>
+    <h1>Save Monthly, Escape Often</h1>
     <p className="subtitle">Save monthly, escape often</p>
     <div className="comparison-grid">
       {comparisonCards.map((card) => (
         <div key={card.title} className="comparison-card">
-          <h3>{card.title}</h3>
+          <h2>{card.title}</h2>
           <ul>
             {card.bullets.map((bullet) => (
               <li key={bullet}>{bullet}</li>
@@ -158,21 +169,35 @@ const Comparison = () => (
 
 const Pricing = () => (
   <section className="pricing">
-    <h2>Pricing</h2>
-    <p className="subtitle">Choose the membership that fits your escape plan</p>
-    <div className="pricing-grid">
-      {pricingPlans.map((plan) => (
-        <div key={plan.tier} className="pricing-card">
-          <h3>{plan.tier}</h3>
-          <p className="price">{plan.price}</p>
-          <ul>
-            {plan.benefits.map((benefit) => (
-              <li key={benefit}>{benefit}</li>
-            ))}
-          </ul>
-          <button className="outline-btn">Join Waiting-List</button>
-        </div>
-      ))}
+    <h1>Pricing</h1>
+    <p className="subtitle">Compare the tiers at a glance</p>
+    <div className="pricing-table">
+      <div className="pricing-features">
+        <h2>Features</h2>
+        <hr />
+        <ul>
+          {pricingFeatures.map((feature) => (
+            <li key={feature}>{feature}</li>
+          ))}
+        </ul>
+      </div>
+      <div className="pricing-columns">
+        {pricingPlans.map((plan) => (
+          <div key={plan.tier} className="pricing-column">
+            <div className="pricing-column-header">
+              <h2>{plan.tier}</h2>
+              <p className="price">{plan.price}</p>
+            </div>
+            <hr />
+            <ul>
+              {pricingFeatures.map((feature) => (
+                <li key={feature}>{plan.features[feature] || "–"}</li>
+              ))}
+            </ul>
+            <button className="pricing-cta">Join</button>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 );
@@ -192,7 +217,7 @@ const FAQ = () => {
 
   return (
     <section className="faq">
-      <h2>Common Questions</h2>
+      <h1>Common Questions</h1>
       <div className="faq-list">
         {faqs.map((faq, index) => (
           <FAQItem
@@ -210,23 +235,54 @@ const FAQ = () => {
   );
 };
 
-const Newsletter = () => (
-  <section className="newsletter">
-    <h2>Newsletter</h2>
-    <p className="subtitle">Sign up</p>
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-        alert("Thanks for joining the waitlist!");
-      }}
-    >
-      <input type="email" placeholder="name@example.com" required />
-      <button type="submit" className="primary-btn">
-        Submit
-      </button>
-    </form>
-  </section>
-);
+const joinTiers = ["Lite", "Standard", "Premium"];
+
+const JoinForm = () => {
+  const [selectedTier, setSelectedTier] = React.useState(joinTiers[0]);
+
+  return (
+    <section className="join-form">
+      <h1>Join the Waitlist</h1>
+      <p className="subtitle">Pro-join &amp; waived first month club fee</p>
+
+      <div className="join-tier-buttons">
+        {joinTiers.map((tier) => (
+          <button
+            key={tier}
+            type="button"
+            className={`join-tier ${selectedTier === tier ? "active" : ""}`}
+            onClick={() => setSelectedTier(tier)}
+          >
+            {tier}
+          </button>
+        ))}
+      </div>
+
+      <form
+        className="join-form-fields"
+        onSubmit={(event) => {
+          event.preventDefault();
+          const formData = new FormData(event.currentTarget);
+          const email = formData.get("email");
+          alert(`Thanks for joining the ${selectedTier} waitlist, ${email}!`);
+          event.currentTarget.reset();
+        }}
+      >
+        <input type="hidden" name="tier" value={selectedTier} />
+        <input
+          type="email"
+          name="email"
+          placeholder="your email"
+          aria-label="Email address"
+          required
+        />
+        <button type="submit" className="join-submit">
+          Submit
+        </button>
+      </form>
+    </section>
+  );
+};
 
 const Footer = () => (
   <footer className="footer">
@@ -243,7 +299,7 @@ const App = () => (
       <Comparison />
       <Pricing />
       <FAQ />
-      <Newsletter />
+      <JoinForm />
     </main>
     <Footer />
   </>
