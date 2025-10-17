@@ -88,7 +88,7 @@ main {
 
 .hero {
   height: 520px;
-  background-image: url("../images/beach.png");
+  background-image: url("./images/beach.png");
   background-size: cover;
   background-position: center;
   display: flex;
